@@ -1,0 +1,8 @@
+---
+Title: {{title}}
+Tags: []
+---
+
+# {{title}}
+
+---
