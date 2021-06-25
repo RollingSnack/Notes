@@ -1,8 +1,6 @@
 ---
 Title: Homebrew 基础用法
 Tags: [Tutorial, packageManager]
-Created: 2021-06-24 15:25
-Modified: 2021-06-24 19:51
 ---
 
 # Homebrew 基础用法

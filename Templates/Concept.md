@@ -4,6 +4,3 @@ Aliases: []
 Tags: [Concept]
 ---
 
-# {{title}}
-
----

@@ -4,7 +4,7 @@ Aliases: []
 Tags: [Concept, packageManager]
 ---
 
-[Homebrew](https://brew.sh) 是一个开源的包管理软件，由 [[Ruby]] 编写，并最早于 [[Ruby on Rails]] 社区开始流行。
+[Homebrew](https://brew.sh) 是一个 [[open-source | 开源]] 的 [[package manager | 包管理软件]] ，由 [[Ruby]] 编写，并最早于 [[Ruby on Rails]] 社区开始流行。
 
 <br>
 
