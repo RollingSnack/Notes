@@ -1,6 +1,6 @@
 ---
 Title: Homebrew 基础用法
-Tags: [Tutorial, packageManager]
+Tags: [Note, packageManager]
 ---
 
 # Homebrew 基础用法
