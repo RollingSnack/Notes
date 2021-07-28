@@ -66,23 +66,39 @@ Formuale 软件的默认安装目录在 `/usr/local/Cellar` 文件夹下，而 C
 
 ## 更新
 
-### 查找新版本
+### 本体更新
 
-`update` 命令既用于查找 Homebrew 自身的最新版本，也用于从 [[GitHub]] 处获取所有 **Formulae** 的最新版本。
+`update` 命令用于查找 Homebrew 自身的最新版本，也用于从 [[GitHub]] 处获取 **Formulae** 的目录更新。
 
 ```shell
 brew update
 ```
 
+### 查询过时软件
+
+`outdated` 用于查找已安装但是过时的软件。
+
+```shell
+brew outdated
+```
+
+可以附加选项对 Cask 和 Formulae、或者任何一个指定了名字的软件单独查询。
+
+```shell
+brew outdated --cask  # 查询所有的 cask 类型的软件是否过时
+brew outdated --formulae  # 查询所有的 formulae 类型的软件是否过时
+brew outdated <package>  # 查询指定的 <package> 是否过时
+```
+
 ### 安装新版本
 
-`upgrade` 命令后面可以不接任何的参数。与 `update` 不同的是，该命令会对包括 Cask 和 Formulae 在内的软件全局更新。
+`upgrade` 命令后面可以不接任何的参数，该命令会对包括 Cask 和 Formulae 在内的软件全局更新。
 
 ```shell
 brew upgrade  # 更新所有软件
 ```
 
-也可以附加选项对 Cask 和 Formulae，或者任何一个指定了名字的软件更新。
+该命令也支持 Cask 和 Formulae、或指定软件名的附加选项。
 
 ```shell
 brew upgrade --cask  # 更新所有的 cask 类型的软件
@@ -97,7 +113,19 @@ brew upgrade <package>  # 更新指定的 <package>
 如果要求 Homebrew 对这类软件进行版本管理的话，需要在更新时加上 `--greedy` 参数。该参数会把包含有上述标记的 Cask 软件一并纳入。
 
 ```shell
+brew outdated --greedy
 brew upgrade --greedy
+```
+
+### 清理旧版本
+
+`cleanup` 用于清理旧版本的软件。
+当安装的软件不是最新时，会弹出 Warning，同时跳过对改软件的清理。
+
+```shell
+brew cleanup  # 清理所有旧版本
+brew cleanup <package>  # 清理指定软件的旧版本
+brew cleanup -n  # 只查看不清理
 ```
 
 ## 帮助
