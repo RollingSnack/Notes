@@ -1,9 +1,9 @@
 ---
-Title: pathlib 源码阅读（一）：功能
-Tags: [Note, Series, Python]
+Title: pathlib (4) 源码阅读-功能
+Tags: [Note, Series, Python3]
 ---
 
-# pathlib 源码阅读（一）：功能
+# pathlib (4) 源码阅读-功能
 
 ![[Concepts/pathlib]]
 
@@ -482,3 +482,9 @@ def suffixes(self):
 
 ### is 判断方法
 
+## 系列
+
+- [[pathlib (1) 面向对象]]
+- [[pathlib (2) 纯路径类]]
+- [[pathlib (3) 路径类]]
+- [[pathlib (4) 源码阅读——功能]] **<**
