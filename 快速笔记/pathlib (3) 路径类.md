@@ -30,7 +30,7 @@ PosixPath('/home/anyone/pathlib')
 
 返回一个表示当前 [[用户]] 家目录的绝对路径的新对象。
 
-## 读取文件信息
+## 读取文件元信息
 
 ### stat()
 
@@ -44,7 +44,7 @@ PosixPath('/home/anyone/pathlib')
 
 ### lstat()
 
-和 [[#stat()]] 一样，但该方法在面对 [[软链接]] 时，返回的是软链接的信息，而不是软链接的目标的信息。
+和 [[#stat()]] 一样，但该方法在面对 [[符号链接]] 时，返回的是符号链接的信息，而不是符号链接的目标的信息。
 
 ### owner()
 
@@ -61,19 +61,166 @@ PosixPath('/home/anyone/pathlib')
 'wheel'
 ```
 
-## 修改路径对象信息
+## 修改文件元信息
 
 ### rename(target)
 
+将文件或者目录重定向给 target，并返回一个指向 target 的 Path 实例。
+如果调用的 Path 对象不存在会抛出 `FileNotFoundError`；如果 target 指向的文件确实存在于文件系统上，那么只有当用户有足够的权限，才会静默替换。
+
+参数 target 可以是一个字符串，或者是一个路径对象；既可以是相对路径，也可以是绝对路径。
+注意：target 的相对路径是相对于工作目录，而不是相对于 Path 实例的目录。
+
+```Python
+>>> p = Path("foo")
+>>> q = Path("bar")
+>>> p.rename(q)  # p 和 q 两个对象都存在，但系统中只有 bar 文件，不存在 foo 文件
+PosixPath('bar')
+```
+
+- 3.8 之后，添加了返回值，会返回一个新的 Path 实例。
+
 ### replace(target)
+
+和 `rename` 一样，将文件或者目录重定向给 target，并返回一个指向 target 的 Path 实例。
+区别是，target 指向存在的文件时，会无条件替换。
+
+- 3.8 之后，添加了返回值，会返回一个新的 Path 实例。
 
 ### chmod(mode)
 
 改变文件的模式和权限，和 `os.chmod()` 一样。
 
+```Python
+>>> Path("setup.py").chmod(0o444)
+```
+
 ### lchmod(mode)
 
-如果路径指向软链接，那么修改的是软链接的模式和权限，而不是软链接的目标。
+如果路径指向符号链接，那么修改的是符号链接的模式和权限，而不是符号链接的目标的。
+
+## 目录操作
+
+### mkdir(...)
+
+原型：
+
+```Python
+Path.mkdir(mode=0o777, parents=False, exist_ok=False)
+```
+
+根据给定的路径，新建一个目录；如果给出了 `mode` 需要和 [[进程]] 的 `umask` 值合并来决定。
+
+`parents` 设置为 `True` 后，从当前路径到目标路径中不存在的目录都将被创建；权限是默认的权限，而不跟随 `mode`；相当于 `mkdir -p` 命令。
+否则，当父路径不存在时，抛出 `FileNotFoundError`。
+
+- 3.5 版本之后才加入的 `exist_ok` 形参，默认值为 `False`，若目标路径已存在目录的话，会抛出 `FileExistsError`；反之，忽略该异常。
+
+### rmdir()
+
+移除该目录，要求是该目录必须为空。
+
+### expanduser()
+
+展开波浪线指令 `~` 的构造，会返回新的路径对象。
+使用上和 `os.path.expanduser()` 功能一致。
+
+```Python
+>>> PosixPath("~/Documents/Note").expanduser()
+PosixPath('/home/snack/Documents/Note')
+```
+
+### glob(pattern)
+
+解析相对于此路径的通配符 pattern，产生所有匹配的文件。
+使用 `**` 会递归地匹配当前目录及所有子目录，有时可能会消耗非常多的时间。
+
+```Python
+>>> sorted(Path(".").glob("**/*.py"))
+[PosixPath('build/lib/pathlib.py'),
+ PosixPath('docs/conf.py'),
+ PosixPath('pathlib.py')]
+```
+
+该操作会引发一个 [[审计事件]]。
+
+### rglob(pattern)
+
+主动触发子目录递归，相当于在 [[#glob(pattern)]] 时在 pattern canshu 前添加一个 `**/`。
+
+```Python
+>>> sorted(Path(".").rglob("*.py"))
+[PosixPath('build/lib/pathlib.py'),
+ PosixPath('docs/conf.py'),
+ PosixPath('pathlib.py')]
+```
+
+该操作也会引发一个审计事件。
+
+### iterdir()
+
+返回迭代器，迭代产生路径下的所有路径对象，不包括 `.` 和 `..`。
+
+```Python
+>>> for child in Path("docs").iterdir(): child
+...
+PosixPath('docs/conf.py')
+PosixPath('docs/index.rst')
+```
+
+pathlib 没有规定，在迭代器创建之后又有目录被移除或添加的执行情形，因此可能导致结果不会如预期所想地展示。
+
+## 符号链接操作
+
+### symlink_to(...)
+
+原型：
+
+```Python
+Path.symlink_to(target, target_is_directory=False)
+```
+
+以该路径对象创建指向 `target` 的符号链接，原路径对象成为符号链接。
+
+Windows 下，符号链接的目标是目录的话，`target_is_directory` 必须为 `True`；POSIX 忽略该参数。
+
+### link_to(target)
+
+创建 [[硬链接]] `target` 指向该路径，原路径对象仍然是真实文件。
+
+```ascii
+                                         +-------------+
+   symlink_to:          +---- target ----+ Path Object |
+                        |                +------+------+
+                        v                       v
+                  +-----+-----+           +-----+-----+
+                  | real_file +<----------+ link_file |
+                  +-----+-----+           +-----+-----+
+                        ^                       ^
+                 +------+------+                |
+      link_to:   | Path Object +---- target ----+
+                 +-------------+
+```
+
+### unlink(missing_ok=False)
+
+移除该符号链接。
+如果路径对象是个目录，则会调用 `rmdir()`。
+
+- 3.8 新增形参 `missing_ok`，为真时，方法会忽略 `FileNotFoundError`（和 `rm -f` 命令相同）。
+
+### readlink()
+
+### resolve(strict=False)
+
+将路径绝对化，其中的符号链接和 `..` 符号也将被正确解析，返回新的路径对象。
+
+```Python
+>>> 
+```
+
+- 3.6 新增形参 `strict`，默认值 `False`；3.6 之前相当于 `strict=True`。
+当路径不存在且 `strict=True` 时，抛出 `FileNotFoundError`；如果解析时发生无限循环，则抛出 `RuntimeError`。
 
 ## 读写操作
 
@@ -145,45 +292,10 @@ Path.read_text(encoding=None, errors=None)
 'Text contents'
 ```
 
-## 目录操作
-
-### expanduser()
-
-展开波浪线指令 `~` 的构造，会返回新的路径对象。
-使用上和 `os.path.expanduser()` 功能一致。
-
-```Python
->>> PosixPath("~/Documents/Note").expanduser()
-PosixPath('/home/snack/Documents/Note')
-```
-
-### mkdir(...)
-
-原型：
-
-```Python
-Path.mkdir(mode=0o777, parents=False, exist_ok=False)
-```
-
-根据给定的路径，新建一个目录；如果给出了 `mode` 需要和 [[进程]] 的 `umask` 值合并来决定。
-
-`parents` 设置为 `True` 后，从当前路径到目标路径中不存在的目录都将被创建；权限是默认的权限，而不跟随 `mode`；相当于 `mkdir -p` 命令。
-否则，当父路径不存在时，抛出 `FileNotFoundError`。
-
-- `exist_ok` 形参是在 3.5 版本才加入的，默认值为 `False`，若目标路径已存在目录的话，会抛出 `FileExistsError`；反之，忽略该异常。
-
-### rmdir()
-
-## 软链接操作
-
-### readlink()
-
-### resolve(strict=False)
-
 ## is 判断方法
 
 is 判断方法会根据路径对象的指向，判断是否属于某种类型，然后返回 `True` 或 `False`。
-如果路径对象指向的是软链接的话，那么需要判断软链接实际代表的目标再返回。
+如果路径对象指向的是符号链接的话，那么需要判断符号链接实际代表的目标再返回。
 
 这类方法会传播它所遇到的，如权限错误 `PermissionError` 等错误。
 
@@ -191,15 +303,15 @@ is 判断方法会根据路径对象的指向，判断是否属于某种类型�
 
 ### is_dir()
 
-判断路径是否指向一个 [[目录]]，或目录的软链接。
+判断路径是否指向一个 [[目录]]，或目录的符号链接。
 
 ### is_file()
 
-判断路径是否指向一个 [[正常文件]]，或正常文件的软链接。
+判断路径是否指向一个 [[正常文件]]，或正常文件的符号链接。
 
 ### is_mount()
 
-判断路径是否指向一个 [[挂载点]]，或挂载点的软链接。
+判断路径是否指向一个 [[挂载点]]，或挂载点的符号链接。
 
 判断时会根据路径对象的父目录判断是否是挂载的。
 
@@ -207,25 +319,25 @@ is 判断方法会根据路径对象的指向，判断是否属于某种类型�
 
 ### is_symlink()
 
-判断路径是否指向一个软链接。
+判断路径是否指向一个符号链接。
 
 ### is_socket()
 
-判断路径是否指向一个 [[Unix]] [[socket 文件]]，或它的软链接。
+判断路径是否指向一个 [[Unix]] [[socket 文件]]，或它的符号链接。
 
 ### is_fifo()
 
-判断路径是否指向一个 [[先进先出]] 存储，或它的软链接。
+判断路径是否指向一个 [[先进先出]] 存储，或它的符号链接。
 
 ### is_block_device()
 
-判断路径是否指向一个 [[块设备]]，或块设备的软链接。
+判断路径是否指向一个 [[块设备]]，或块设备的符号链接。
 
 ### is_char_device()
 
-判断路径是否指向一个 [[字节设备]]，或字节设备的软链接
+判断路径是否指向一个 [[字节设备]]，或字节设备的符号链接。
 
-## 更新内容
+## 版本差异
 
 - 3.5 新版功能
     - [[#home()]]
@@ -238,14 +350,17 @@ is 判断方法会根据路径对象的指向，判断是否属于某种类型�
 - 3.7 新版功能
     - [[#is_mount()]]
 
-- 3.5 跟新内容
+- 3.5 更新内容
     - [[#mkdir(...)]]
+
+- 3.6 更新内容
+    - [[#resolve(strict=False)]]
 
 - 3.8 更新内容
     - [[#is 判断方法]]
     - [[#exists()]]
 
-## 系列
+## 系列笔记
 
 - [[pathlib (1) 面向对象]]
 - [[pathlib (2) 纯路径类]]
