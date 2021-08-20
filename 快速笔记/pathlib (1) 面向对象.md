@@ -36,11 +36,66 @@ Tags: [Note, Series, Python3]
 
 前 3 种是纯路径，只提供路径计算，而不提供 [[I/O]] 操作；后 3 种分别继承前三种，既提供路径计算，也提供 I/O 操作。
 
----
+## os.PathLike
+
+路径对象可以用于任何可以接受 `os.PathLike` 接口的地方。
+
+```Python
+>>> os.fspath(PurePath("/etc"))
+'/etc'
+```
+
+## 基本用法
+
+导入主类：
+
+```Python
+>>> from pathlib import Path
+```
+
+列出子目录：
+
+```Python
+>>> [x for x in Path('.').iterdir() if x.is_dir()]
+[PosixPath('docs'), PosixPath('dist'), PosixPath('res')]
+```
+
+列出当前目录树下的所有 Python 文件：
+
+```Python
+>>> list(Path('.').glob('**/*.py'))
+[PosixPath('setup.py'), PosixPath('docs/conf.py'), PosixPath('build/lib/pathlib.py')]
+```
+
+在目录树中移动：
+
+```Python
+>>> p = Path('/etc')
+>>> q = p / 'init.d' / 'reboot'
+>>> q
+PosixPath('/etc/init.d/reboot')
+```
+
+路径查询：
+
+```Python
+>>> q.exists()
+True
+>>> q.is_dir()
+False
+```
+
+打开一个文件：
+
+```Python
+>>> with q.open() as f: f.readline()
+...
+'#!/bin/bash\n'
+```
 
 ## 系列笔记
 
 - [[pathlib (1) 面向对象]] **<**
 - [[pathlib (2) 纯路径类]]
 - [[pathlib (3) 路径类]]
-- [[pathlib (4) 源码阅读——功能]]
+- [[pathlib (4) 源码阅读 PurePath]]
