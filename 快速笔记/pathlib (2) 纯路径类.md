@@ -9,11 +9,11 @@ Tags: [Note, Series, Python3]
 
 ## 两种路径风格
 
-纯路径不访问 [[文件系统]]，只参与路径计算；因此无论在什么系统上都可以实例化前 3 个类。
+纯路径 [[类]] 不访问真实的 [[文件系统]]，只参与路径计算；因此无论在什么系统上都可以实例化 3 个纯路径类。
 
 `PurePosixPath` 和 `PureWindowsPath` 分别表示两种路径风格，前者是 [[POSIX]] 的路径风格，后者是以 [[Windows]] 系统为代表的路径风格。
 
-当使用 `PurePath` 时，会根据当前系统的路径风格，实例化为具体的某一种 [[对象]]。
+当使用 `PurePath` 时，会根据当前系统的路径风格，实例化为上述两种中具体的某一种 [[对象]]。
 
 ```Python
 >>> PurePath("setup.py")
@@ -34,7 +34,7 @@ PurePosixPath('setup.py')  # 在 Unix 系统上运行时实例化
 
 由于 POSIX 总是没有盘符的，因此 POSIX 路径只要包含根目录就是 [[绝对路径]]，而 Windows 系统中的绝对路径必须同时包含盘符和根目录才算。
 
-因此对于 Windows 来说，存在一类既不是绝对路径，也不是相对路径的路径对象；即没有盘符却有根目录，或有盘符而没有根目录的路径对象。
+此外，对于 Windows 来说，存在一类既不是绝对路径，也不是相对路径的路径对象；即没有盘符却有根目录，或有盘符而没有根目录的路径对象。
 
 ```Python
 >>> PureWindowsPath("/Windows").is_absolute()
@@ -258,11 +258,6 @@ Windows 系统也有根目录，与盘符是无关的。
 
 返回一个路径对象。
 
-```Python
->>> PurePosixPath("a/b/c/d").parent
-PurePosixPath('a/b/c')
-```
-
 根目录的父路径仍然会返回根目录。
 
 ```Python
@@ -313,12 +308,12 @@ PurePosixPath('.')
 'setup.py'
 
 >>> PurePosixPath("/").name
-''  # 根目录不纳入 name 属性
+''  # 根目录不属于 name
 ```
 
 ### suffix 和 suffixes 后缀
 
-**`suffix`** 返回一个字符串，它指向 `name` 的最后一个 [[后缀]]，它包含标识后缀的那个点。
+**`suffix`** 返回一个字符串，它指向 `name` 的最后一个 [[后缀]]，包含用于标识后缀的那个点。
 
 ```Python
 >>> PurePosixPath("lib/library.tar.gz").suffix
@@ -339,7 +334,7 @@ PurePosixPath('.')
 ('library.tar.gz.', '')  # name 存在，但点位于最后一位，说明无后缀
 ```
 
-**`suffixes`** 返回一个字符串 [[列表]]，当路径可能有多个后缀时，按顺序返回列表；不存在时返回空列表。
+**`suffixes`** 返回一个字符串 [[列表]]，路径可能有多个后缀，将按顺序返回列表；不存在时返回空列表。
 
 顺序：指从左到右，`suffix` 在最后一个。
 
@@ -350,6 +345,7 @@ PurePosixPath('.')
 
 ### stem 文件名主干
 
+返回一个字符串。
 `stem` 是去掉最后一个后缀的 `name`，相当于 `name - suffix`。
 
 ```Python
@@ -450,7 +446,7 @@ PurePosixPath('library.tar')
 
 返回一个新路径对象，将传入的多个参数和原路径对象拼接在一起。
 
-该方法的各种细节和斜杠运算符是一致的。
+传入参数的各种细节和斜杠运算符是一致的。
 
 ```Python
 >>> PurePath("/a").joinpath("/b")
@@ -476,7 +472,7 @@ PurePosixPath('c')  # 先组合成 a/b 再计算相对
 
 返回一个 [[布尔]] 变量。
 
-将路径对象和 [[通配符]] 风格的模式 *pattern* 进行匹配，如果匹配成功则返回 `True`，否则 `False`。
+将路径对象和 [[通配符]] *pattern* 进行匹配，如果匹配成功则返回 `True`，否则 `False`。
 它会遵循相应平台的规则，例如 Windows 对大小写不敏感。
 
 ```Python
@@ -507,4 +503,4 @@ False
 - [[pathlib (1) 面向对象]]
 - [[pathlib (2) 纯路径类]] **<**
 - [[pathlib (3) 路径类]]
-- [[pathlib (4) 源码阅读——功能]]
+- [[pathlib (4) 源码阅读 PurePath]]
