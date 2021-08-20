@@ -11,7 +11,7 @@ Tags: [Tutorial, OS]
 
 本文主要参考 [官方文档](https://docs.microsoft.com/en-us/windows/wsl/install-win10) 的手动安装部分，且目标为 WSL2。
 
-目前 WSL 只可工作在 [[Windwos]] 10 上，对于 x64 系统的要求是 Version 1903 以上且 Build 18362 以上。
+目前 WSL 只可工作在 [[Windows]] 10 上，对于 x64 系统的要求是 Version 1903 以上且 Build 18362 以上。
 
 ## 安装
 
