@@ -45,6 +45,8 @@ Tags: [Note, Series, Python3]
 '/etc'
 ```
 
+该接口是 3.6 以上版本的新增功能，因此建议 pathlib 也尽可能工作在 3.6 以上的版本中。
+
 ## 基本用法
 
 导入主类：
@@ -81,6 +83,7 @@ PosixPath('/etc/init.d/reboot')
 ```Python
 >>> q.exists()
 True
+
 >>> q.is_dir()
 False
 ```
