@@ -7,18 +7,6 @@ Tags: [Document, Go]
 
 ---
 
-## 示例代码
-
-```Go
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("hello, world")
-}
-```
-
 ## 概念
 
 [[包]] 是结构化代码的一种方式。
