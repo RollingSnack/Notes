@@ -1,5 +1,27 @@
 ## API
 
+### createProgram
+
+```TypeScript
+const program = ts.createProgram(
+  rootNames,
+  options,
+  host,
+  oldProgram,
+  configFileParsingDiagnostics,
+): Program;
+```
+
+参数：
+- rootNames，字符串数组，代表源代码的文件集合
+- options，编译选项
+- host?，可选参数，指定 [[CompilerHost]]
+- oldProgram，也是一个 ts.Program，可增量
+- configFileParsingDiagnostics // TODO
+
+返回：
+- [[Program]]
+
 ### createSourceFile
 
 ```TypeScript
@@ -20,7 +42,7 @@ source = ts.createSourceFile(
 - scriptKind // TODO
 
 返回
-- [[#SourceFile]]
+- [[SourceFile]]
 
 ### forEachChild
 
