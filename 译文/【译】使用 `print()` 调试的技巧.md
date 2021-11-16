@@ -1,8 +1,9 @@
 ---
 Title: 【译】使用 `print()` 调试的技巧
-Tags: [Python]
+Tags: [Translation, Python]
 Source Title: Tips for debugging with print()
 Source Link: https://adamj.eu/tech/2021/10/08/tips-for-debugging-with-print/
+Author: Adam Johnson
 ---
 
 # 【译】使用 `print()` 调试的技巧
