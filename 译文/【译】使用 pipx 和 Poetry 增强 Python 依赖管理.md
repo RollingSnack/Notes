@@ -138,7 +138,7 @@ PROMPT_COMMAND="auto_poet;$PROMPT_COMMAND"
 
 这个和 `poet` 函数紧密相连；你在 bash 会话中的任意时刻使用 `poet`，激活功能会从自动变为手动，而且变更目录时也不再自动切换虚拟环境。
 
-![[【图1】【译】使用 pipx 和 Poetry 增强 Python 依赖管理.png]]
+![[【译】使用 pipx 和 Poetry 增强 Python 依赖管理【图1】.png]]
 
 ### Poetry 和依赖管理
 
@@ -224,7 +224,7 @@ Poetry 还移除了手动选择可编辑安装的需求（pip install -e）。
 若要向 PyPi（或其他仓库）发布这个包，只需运行 `poetry publish`。
 你可以整合构建与发布到一个命令：`poetry publish --build`。
 
-![[【图2】【译】使用 pipx 和 Poetry 增强 Python 依赖管理.png]]
+![[【译】使用 pipx 和 Poetry 增强 Python 依赖管理【图2】.png]]
 
 ## 使用
 
