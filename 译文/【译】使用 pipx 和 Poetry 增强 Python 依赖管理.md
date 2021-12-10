@@ -262,7 +262,7 @@ $ foo # 同样可行
 
 在这一情况下，`bar` 和 `foo` 都被安装在了单独的虚拟环境中，所以它们冲突的依赖并不影响。
 
-## 我的 bashrc 中额外的东西
+## 我在 bashrc 中额外的东西
 
 ```shell
 function wrapper_no_poet() {
