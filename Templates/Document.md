@@ -1,6 +1,6 @@
 ---
 Title: {{title}}
-Tags: [Document]
+Tags: [Type/Document]
 ---
 
 # {{title}}

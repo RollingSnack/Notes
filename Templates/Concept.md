@@ -1,6 +1,6 @@
 ---
 Title: {{title}}
 Aliases: []
-Tags: [Concept]
+Tags: [Type/Concept]
 ---
 

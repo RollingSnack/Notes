@@ -1,6 +1,6 @@
 ---
 Title: this 指向问题
-Tags: [Note, JavaScript]
+Tags: [Type/Note, 编程语言/JavaScript]
 ---
 
 # this 指向问题

@@ -1,6 +1,6 @@
 ---
 Title: Homebrew 基础用法
-Tags: [Note, packageManager]
+Tags: [Type/Note, 开发/包管理器, 操作系统/Mac]
 ---
 
 # Homebrew 基础用法

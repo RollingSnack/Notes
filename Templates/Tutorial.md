@@ -1,6 +1,6 @@
 ---
 Title: {{title}}
-Tags: [Tutorial]
+Tags: [Type/Tutorial]
 ---
 
 # {{title}}
