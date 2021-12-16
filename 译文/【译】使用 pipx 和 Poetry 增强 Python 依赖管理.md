@@ -1,9 +1,9 @@
 ---
 Title: 【译】使用 pipx 和 Poetry 增强 Python 依赖管理
 Tags: [Translation, Python, Development]
-Source Title: Improving Python Dependency Management With pipx and Poetry
-Source Link: https://cedaei.com/posts/python-poetry-pipx/
-Author: Ceda Ei
+Original Title: Improving Python Dependency Management With pipx and Poetry
+Original Link: https://cedaei.com/posts/python-poetry-pipx/
+Original Author: Ceda Ei
 ---
 
 # 【译】使用 pipx 和 Poetry 增强 Python 依赖管理
