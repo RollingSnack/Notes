@@ -1,11 +1,11 @@
 ---
-Title: 【译】Python 101 - 如何生成 PDF
+Title: Python 101 - 如何生成 PDF
 Tags: [Translation, Python]
 Original Title: Python 101 - How to Generate a PDF
 Original Link: https://www.blog.pythonlibrary.org/2021/09/28/python-101-how-to-generate-a-pdf/
 ---
 
-# 【译】Python 101 - 如何生成 PDF
+# Python 101 - 如何生成 PDF
 
 ---
 
@@ -92,7 +92,7 @@ my_canvas.save()
 
 当打开 PDF 时，它看上去像这样：
 
-![[【译】Python 101 - 如何生成 PDF【图1】.png]]
+![[译文/Python 101 - 如何生成 PDF/Figure-1.png]]
 
 *Hello World 出现在 ReportLab 画布上*
 
@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
 当你打开这个 PDF，会看到如下内容：
 
-![[【译】Python 101 - 如何生成 PDF【图2】.png]]
+![[译文/Python 101 - 如何生成 PDF/Figure-2.png]]
 
 *使用 ReportLab Canvas 创建的表格*
 
@@ -193,7 +193,7 @@ if __name__ == '__main__':
 
 当你执行这段代码，最终会得到一个像这样的 PDF：
 
-![[【译】Python 101 - 如何生成 PDF【图3】.png]]
+![[Figure-3.png]]
 
 *使用 ReportLab 创建多边形*
 
@@ -228,7 +228,7 @@ if __name__ == '__main__':
 
 当你执行这段代码，最终会得到像这样的 PDF：
 
-![[【译】Python 101 - 如何生成 PDF【图4】.png]]
+![[Figure-4.png]]
 
 *往 PDF 中添加一张图片*
 
@@ -307,7 +307,7 @@ if __name__ == '__main__':
 现在 PDF 已经生成了。
 它将看上去像这样：
 
-![[【译】Python 101 - 如何生成 PDF【图5】.png]]
+![[Figure-5.png]]
 
 *在 ReportLab 中创建一个 Paragraph*
 
@@ -355,7 +355,7 @@ if __name__ == '__main__':
 当你执行这段代码，会生成一个 3 页的文档。
 第一页会以如下截图这样开始：
 
-![[【译】Python 101 - 如何生成 PDF【图6】.png]]
+![[Figure-6.png]]
 
 *创建一个多页的 PDF*
 
@@ -409,7 +409,7 @@ if __name__ == '__main__':
 
 你的 PDF 现在应该有一个表格了，它看上去像这样：
 
-![[【译】Python 101 - 如何生成 PDF【图7】.png]]
+![[Figure-7.png]]
 
 *在 ReportLab 中创建一个简单表格*
 
@@ -468,7 +468,7 @@ if __name__ == '__main__':
 
 当你执行这段代码，最终会得到如下表格：
 
-![[【译】Python 101 - 如何生成 PDF【图8】.png]]
+![[Figure-8.png]]
 
 *ReportLab 表格及样式*
 
