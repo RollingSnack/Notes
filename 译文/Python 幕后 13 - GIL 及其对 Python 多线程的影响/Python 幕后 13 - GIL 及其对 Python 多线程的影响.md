@@ -53,43 +53,43 @@ GIL 带来的开销使多线程程序更慢，且更令人惊讶的是，它甚�
 PyObject*
 _PyEval_EvalFrameDefault(PyThreadState *tstate, PyFrameObject *f, int throwflag)
 {
-    // ... declaration of local variables and other boring stuff
+    // ... 局部变量的定义和其他乏味事物
 
-    // the evaluation loop
+    // 求值循环
     for (;;) {
 
-        // `eval_breaker` tells whether we should suspend bytecode execution
-        // e.g. other thread requested the GIL
+        // `eval_breaker` 说明是否应该暂停执行字节码
+        // 例如，其他线程请求 GIL
         if (_Py_atomic_load_relaxed(eval_breaker)) {
 
-            // `eval_frame_handle_pending()` suspends bytecode execution
-            // e.g. when another thread requests the GIL,
-            // this function drops the GIL and waits for the GIL again
+            // `eval_frame_handle_pending()` 暂定执行字节码
+            // 例如，当另一个线程请求 GIL
+            // 该函数会丢弃 GIL 然后重新等待 GIL
             if (eval_frame_handle_pending(tstate) != 0) {
                 goto error;
             }
         }
 
-        // get next bytecode instruction
+        // 获取下一个字节码指令
         NEXTOPARG();
 
         switch (opcode) {
             case TARGET(NOP) {
-                FAST_DISPATCH(); // next iteration
+                FAST_DISPATCH(); // 下一轮迭代
             }
 
             case TARGET(LOAD_FAST) {
-                // ... code for loading local variable
-                FAST_DISPATCH(); // next iteration
+                // ... 加载局部变量的代码
+                FAST_DISPATCH(); // 下一轮迭代
             }
 
-            // ... 117 more cases for every possible opcode
+            // ... 其余 117 种情况，适配每个可能的操作码（opcode）
         }
 
-        // ... error handling
+        // ... 异常处理
     }
 
-    // ... termination
+    // ... 终止
 }
 ```
 
@@ -101,7 +101,7 @@ _PyEval_EvalFrameDefault(PyThreadState *tstate, PyFrameObject *f, int throwflag)
 import threading
 
 def f(a, b, c):
-    # do something
+    # 做点什么
     pass
 
 t = threading.Thread(target=f, args=(1, 2), kwargs={'c': 3})
@@ -259,7 +259,7 @@ RPS 降到了 100，是 300 倍缩小！
 ```Python
 from multiprocessing import Process
 
-# ... the same server code
+# ... 同样的服务器代码
 
 if __name__ == '__main__':
     Process(target=compute).start()
@@ -573,24 +573,23 @@ Larry Hastings 关于 GIL 和 Gilectomy 的演讲（[1](https://www.youtube.com/
 
 ```C
 struct _gil_runtime_state {
-    /* microseconds (the Python API uses seconds, though) */
+    /* 毫秒（不过 Python API 用的是秒） */
     unsigned long interval;
-    /* Last PyThreadState holding / having held the GIL. This helps us
-       know whether anyone else was scheduled after we dropped the GIL. */
+    /* 最后一个持有或曾持有 GIL 的 PyThreadState。
+       这帮助我们理解在丢弃 GIL 后是否有其他线程被调度。 */
     _Py_atomic_address last_holder;
-    /* Whether the GIL is already taken (-1 if uninitialized). This is
-       atomic because it can be read without any lock taken in ceval.c. */
+    /* GIL 是否被取走了（未初始化时为 -1）。
+       这是原子性的，因为在 ceval.c 里可以不加任何锁就读取它。 */
     _Py_atomic_int locked;
-    /* Number of GIL switches since the beginning. */
+    /* 开始以来 GIL 切换的次数 */
     unsigned long switch_number;
-    /* This condition variable allows one or several threads to wait
-       until the GIL is released. In addition, the mutex also protects
-       the above variables. */
+    /* 该条件变量允许一个或多个线程等待 GIL 的释放。
+       此外，此互斥量还会保护上面的条件变量。 */
     PyCOND_T cond;
     PyMUTEX_T mutex;
 #ifdef FORCE_SWITCHING
-    /* This condition variable helps the GIL-releasing thread wait for
-       a GIL-awaiting thread to be scheduled and take the GIL. */
+    /* 该条件变量帮助释放 GIL 的线程等待，
+       直到某个等待 GIL 的线程被调度并取走 GIL。 */
     PyCOND_T switch_cond;
     PyMUTEX_T switch_mutex;
 #endif
@@ -623,14 +622,11 @@ typedef struct pyruntimestate {
 ```C
 struct _gilstate_runtime_state {
     /* bpo-26558: Flag to disable PyGILState_Check().
-       If set to non-zero, PyGILState_Check() always return 1. */
+       如果设置为非零值，PyGILState_Check() 总会返回 1。 */
     int check_enabled;
-    /* Assuming the current thread holds the GIL, this is the
-       PyThreadState for the current thread. */
+    /* 假设当前线程持有 GIL，PyThreadState 指向的就是当前线程。 */
     _Py_atomic_address tstate_current;
-    /* The single PyInterpreterState used by this process'
-       GILState implementation
-    */
+    /* 进程的 GILState 实现所使用的单个 PyInterpreterState */
     /* TODO: Given interp_main, it may be possible to kill this ref */
     PyInterpreterState *autoInterpreterState;
     Py_tss_t autoTSSkey;
@@ -644,10 +640,9 @@ struct _gilstate_runtime_state {
 struct _ceval_state {
     int recursion_limit;
     int tracing_possible;
-    /* This single variable consolidates all requests to break out of
-       the fast path in the eval loop. */
+    /* 该单个变量整合了所有请求，以快速跳出求值循环。 */
     _Py_atomic_int eval_breaker;
-    /* Request for dropping the GIL */
+    /* 丢弃 GIL 的请求 */
     _Py_atomic_int gil_drop_request;
     struct _pending_calls pending;
 };
@@ -659,30 +654,29 @@ Python/C API 提供了 [`PyEval_RestoreThread()`](https://docs.python.org/3/c-ap
 当持有 GIL 的线程暂停执行字节码时，它们会被调用：
 
 ```C
-/* Handle signals, pending calls, GIL drop request
-   and asynchronous exception */
+/* 处理信号，挂起调用，请求丢弃 GIL 和异步异常 */
 static int
 eval_frame_handle_pending(PyThreadState *tstate)
 {
     _PyRuntimeState * const runtime = &_PyRuntime;
     struct _ceval_runtime_state *ceval = &runtime->ceval;
 
-    /* Pending signals */
+    /* 挂起信号 */
     // ...
 
-    /* Pending calls */
+    /* 挂起调用 */
     struct _ceval_state *ceval2 = &tstate->interp->ceval;
     // ...
 
-    /* GIL drop request */
+    /* 请求丢弃 GIL */
     if (_Py_atomic_load_relaxed(&ceval2->gil_drop_request)) {
-        /* Give another thread a chance */
+        /* 给其他线程一个机会 */
         if (_PyThreadState_Swap(&runtime->gilstate, NULL) != tstate) {
             Py_FatalError("tstate mix-up");
         }
         drop_gil(ceval, ceval2, tstate);
 
-        /* Other threads may run now */
+        /* 其他线程现在可以运行了 */
 
         take_gil(tstate);
 
@@ -691,7 +685,7 @@ eval_frame_handle_pending(PyThreadState *tstate)
         }
     }
 
-    /* Check for asynchronous exception. */
+    /* 检查异步异常。 */
     // ...
 }
 ```
@@ -712,20 +706,20 @@ eval_frame_handle_pending(PyThreadState *tstate)
 以下是条件变量的通常用法：
 
 ```Python
-# awaiting thread
+# 等待线程
 
 mutex.lock()
 while not condition:
     cond_wait(cond_variable, mutex)
-# ... condition is True, do something
+# ... 条件为真，做点什么
 mutex.unlock()
 ```
 
 ```Python
-# signaling thread
+# 信号线程
 
 mutex.lock()
-# ... do something and make condition True
+# ... 做点什么并使条件为真
 cond_signal(cond_variable)
 mutex.unlock()
 ```
