@@ -29,9 +29,9 @@ GIL 带来的开销使多线程程序更慢，且更令人惊讶的是，它甚�
 与其他所有 C 程序一样，主线程通过进入 `python` 的 `main()` 函数来开始执行。
 主线程接下来所做的一切可以总结为三个步骤：
 
-1. [初始化解释器](https://tenthousandmeters.com/blog/python-behind-the-scenes-3-stepping-through-the-cpython-source-code/)
-2. [编译 Python 代码为字节码](https://tenthousandmeters.com/blog/python-behind-the-scenes-2-how-the-cpython-compiler-works/)
-3. [进入求值循环（*evaluation loop*）执行字节码](https://tenthousandmeters.com/blog/python-behind-the-scenes-4-how-python-bytecode-is-executed/)
+1. [初始化解释器](https://tenthousandmeters.com/blog/python-behind-the-scenes-3-stepping-through-the-cpython-source-code/)（[[Python 幕后 03 - 单步执行 CPython 源码 | 译文]]）
+2. [编译 Python 代码为字节码](https://tenthousandmeters.com/blog/python-behind-the-scenes-2-how-the-cpython-compiler-works/)（[[Python 幕后 02 - CPython 编译器是如何工作的 | 译文]]）
+3. [进入求值循环（*evaluation loop*）执行字节码](https://tenthousandmeters.com/blog/python-behind-the-scenes-4-how-python-bytecode-is-executed/)（[[Python 幕后 04 - Python 字节码是如何执行的 | 译文]]）
 
 主线程是一个常见的操作系统线程，执行已编译过的 C 代码。
 其线程状态包括 CPU 寄存器的值和 C 函数的调用栈。
@@ -392,7 +392,7 @@ Python 为此提供了 [`sys.setswitchinterval(interval)`](https://docs.python.o
 为什么 CPython 的开发者们不直接实现一个合理的 GIL 呢？
 
 **2021 年 10 月 7 日的更新：** 我现在了解到把线程限制在单核上的做法，只有当客户端也在同一个内核上时，才有助于改善护航效应，而这是我在对比实验里的做法。
-详见 [后记](#后记)。
+详见 [[#后记]]。
 
 ## 一个合理的 GIL
 
