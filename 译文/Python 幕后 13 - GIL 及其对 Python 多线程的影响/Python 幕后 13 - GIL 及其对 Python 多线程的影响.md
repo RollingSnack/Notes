@@ -1,6 +1,6 @@
 ---
 Title: Python 幕后 13 - GIL 及其对 Python 多线程的影响
-Tags: [类型/译文, 编程语言/Python/GIL, 操作系统/线程]
+Tags: [类型/译文, 类型/笔记, 编程语言/Python/GIL, 操作系统/线程]
 Original Link: https://tenthousandmeters.com/blog/python-behind-the-scenes-13-the-gil-and-its-effects-on-python-multithreading/
 Original Title: Python behind the scenes #13: the GIL and its effects on Python multithreading
 Original Author: Victor Skvortsov
