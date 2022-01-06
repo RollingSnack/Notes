@@ -1,6 +1,6 @@
 ---
 Title: Homebrew 基础用法
-Tags: [Type/Note, 开发/包管理器, 操作系统/Mac]
+Tags: [类型/笔记, 开发/包管理器/Homebrew, 操作系统/Mac]
 ---
 
 # Homebrew 基础用法

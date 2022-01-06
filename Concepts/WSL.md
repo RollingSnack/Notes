@@ -1,7 +1,7 @@
 ---
 Title: WSL
 Aliases: []
-Tags: [Type/Concept, 操作系统/Windows, 操作系统/WSL, 操作系统/Linux]
+Tags: [类型/概念, 操作系统/Windows, 操作系统/WSL, 操作系统/Linux]
 ---
 
 Windows Subsystem for Linux（简称 WSL）是适用于 [[Linux]] 却工作在 [[Windows]] 上的子系统。

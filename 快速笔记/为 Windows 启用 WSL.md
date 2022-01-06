@@ -1,6 +1,6 @@
 ---
 Title: 为 Windows 启用 WSL
-Tags: [Type/Tutorial, 操作系统/Windows, 操作系统/WSL, 操作系统/Linux]
+Tags: [类型/教程, 操作系统/Windows, 操作系统/WSL, 操作系统/Linux]
 ---
 
 # 为 Windows 启用 WSL

@@ -1,6 +1,6 @@
 ---
 Title: {{title}}
-Tags: []
+Tags: [类型/笔记]
 ---
 
 # {{title}}

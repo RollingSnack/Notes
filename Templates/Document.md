@@ -1,6 +1,6 @@
 ---
 Title: {{title}}
-Tags: [Type/Document]
+Tags: [类型/文档]
 ---
 
 # {{title}}

@@ -1,6 +1,6 @@
 ---
 Title: 如何使用 Python 发送邮件
-Tags: [Type/Translation, Type/Tutorial, 编程语言/Python, Email]
+Tags: [类型/译文, 类型/教程, 编程语言/Python/内建模块, Email]
 Original Link: https://www.blog.pythonlibrary.org/2021/09/21/how-to-send-emails-with-python/
 Original Title: # How to Send Emails with Python
 ---

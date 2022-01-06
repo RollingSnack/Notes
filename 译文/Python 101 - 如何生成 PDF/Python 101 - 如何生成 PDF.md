@@ -1,6 +1,6 @@
 ---
 Title: Python 101 - 如何生成 PDF
-Tags: [Type/Translation, Type/Tutorial, 编程语言/Python, PDF]
+Tags: [类型/译文, 类型/教程, 编程语言/Python/第三方模块, PDF]
 Original Link: https://www.blog.pythonlibrary.org/2021/09/28/python-101-how-to-generate-a-pdf/
 Original Title: Python 101 - How to Generate a PDF
 ---

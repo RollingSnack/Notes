@@ -1,7 +1,7 @@
 ---
 Title: this
 Aliases: []
-Tags: [Type/Concept, 编程语言/JavaScript]
+Tags: [类型/概念, 编程语言/JavaScript]
 ---
 
 this 是 [[JavaScript]] 语言中的一个 [[reserved word | 关键字]]。

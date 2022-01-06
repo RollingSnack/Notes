@@ -1,6 +1,6 @@
 ---
 Title: {{title}}
 Aliases: []
-Tags: [Type/Concept]
+Tags: [类型/概念]
 ---
 

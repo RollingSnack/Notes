@@ -1,6 +1,6 @@
 ---
 Title: 使用 pipx 和 Poetry 增强 Python 依赖管理
-Tags: [Type/Translation, Type/Tutorial, 编程语言/Python, 开发/包管理器]
+Tags: [类型/译文, 类型/教程, 编程语言/Python, 开发/包管理器/pipx, 开发/包管理器/Poetry]
 Original Link: https://cedaei.com/posts/python-poetry-pipx/
 Original Title: Improving Python Dependency Management With pipx and Poetry
 Original Author: Ceda Ei
