@@ -1,6 +1,6 @@
 ---
 Title: pathlib (4) 源码阅读 PurePath
-Tags: [Note, Series, Python3]
+Tags: [类型/笔记, 类型/系列, 编程语言/Python3]
 ---
 
 # pathlib (4) 源码阅读 - 纯路径

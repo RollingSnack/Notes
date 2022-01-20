@@ -1,6 +1,6 @@
 ---
 Title: pathlib (2) 纯路径类
-Tags: [Note, Series, Python3]
+Tags: [类型/笔记, 类型/系列, 编程语言/Python]
 ---
 
 # pathlib (2) 纯路径类
@@ -22,17 +22,20 @@ PurePosixPath('setup.py')  # 在 Unix 系统上运行时实例化
 
 ## 绝对路径和相对路径
 
+文件系统以目录 [[树]] 的方式存储，树的根称为 [[根目录]]。
+Windows 系统在根目录之上，还有 [[盘符]]，不过一个盘符下面也只有一个根目录与之对应。
+
 > All paths can have a drive and a root. For POSIX paths, the drive is always empty.
 
-根据 [PEP 428](https://www.python.org/dev/peps/pep-0428/) 的设计，所有路径都有一个 [[盘符]] 和一个 [[根目录]]，只是 POSIX 路径的盘符总是为空。
+根据 [PEP 428](https://www.python.org/dev/peps/pep-0428/) 的设计，所有路径对象都带有一个盘符 和一个根目录，只是 POSIX 下的盘符总是为空。
 
 > A relative path has neither drive nor root.
 
-既没有盘符也没有根目录的路径，称为 [[相对路径]]。
+只有既没有盘符也没有根目录的路径，才被称为 [[相对路径]]。
 
 > A POSIX path is absolute if it has a root. A Windows path is absolute if it has both a drive _and_ a root. A Windows UNC path (e.g. \\host\share\myfile.txt) always has a drive and a root (here, \\host\share and \, respectively).
 
-由于 POSIX 总是没有盘符的，因此 POSIX 路径只要包含根目录就是 [[绝对路径]]，而 Windows 系统中的绝对路径必须同时包含盘符和根目录才算。
+由于 POSIX 总是没有盘符的，因此 POSIX 路径只要包含根目录就是 [[绝对路径]]；而 Windows 系统中的绝对路径必须同时包含盘符和根目录才算。
 
 此外，对于 Windows 来说，存在一类既不是绝对路径，也不是相对路径的路径对象；即没有盘符却有根目录，或有盘符而没有根目录的路径对象。
 
@@ -41,7 +44,7 @@ PurePosixPath('setup.py')  # 在 Unix 系统上运行时实例化
 False
 ```
 
-## 初始化参数
+## 初始化的参数
 
 初始化时，可以传入任意个 [[参数]]，它们是代表路径片段的 [[字符串]]，或者是另一个路径对象。
 
@@ -60,20 +63,24 @@ PurePosixPath('foo/bar')
 PurePosixPath('.')
 ```
 
-### 盘符与根目录规则
+### 锚点规则
+
+初始化传入多个路径参数时，需找出其中的 [[锚点]]，作为路径合并的基础。
+
+如果全都是相对路径，那么锚点就是当前目录 `.`，后续的所有路径都会基于当前目录。
+
+根目录和根目录之间没有串联的可能，所以当传入的参数是若干个包含根目录的路径时，只有最后一个包含根目录的路径可以被视作锚点，锚点及其之后的相对路径会被保留。
+
+```Python
+>>> PurePath("/etc", "init.d", "/usr", "lib64")
+PurePosixPath('/usr/lib64')
+```
 
 当传入的参数是若干个带有盘符的路径时，只有最后一个带有盘符的路径及其之后的路径会被保留。
 
 ```Python
 >>> PureWindowsPath("c:/Windows", "Files.c", "d:/Windows.old", "Files.d")
 PureWindowsPath('d:/Windows.old/Files.d')
-```
-
-当传入的参数是若干个包含根目录的路径时，只有最后一个包含根目录的路径及其之后的相对路径会被保留。
-
-```Python
->>> PurePath("/etc", "init.d", "/usr", "lib64")
-PurePosixPath('/usr/lib64')
 ```
 
 当多个参数内既有盘符又有根目录时，要优先考虑盘符的情况。

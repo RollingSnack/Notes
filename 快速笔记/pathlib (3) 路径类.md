@@ -1,6 +1,6 @@
 ---
 Title: pathlib (3) 路径类
-Tags: [Note, Series, Python3]
+Tags: [类型/笔记, 类型/系列, 编程语言/Python3]
 ---
 
 # pathlib (3) 路径类
