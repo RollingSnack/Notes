@@ -17,7 +17,7 @@ Tags: [Note, Series, Python3]
 
 `PurePosixPath` 和 `PureWindowsPath` 分别表示两种路径风格，后者是以 [[Windows]] 系统为代表的路径风格。
 
-当使用 `PurePath` 时，会根据当前系统的路径风格，实例化为具体的某一种。
+可以使用 `PurePath` 时，会根据当前系统的路径风格，实例化为具体的某一种。
 
 ```Python
 >>> PurePath("setup.py")

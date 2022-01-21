@@ -1,6 +1,6 @@
 ---
 Title: pathlib (1) 面向对象
-Tags: [类型/笔记, 类型/系列, 编程语言/Python]
+Tags: [类型/笔记, 类型/系列/pathlib, 编程语言/Python]
 ---
 
 # pathlib (1) 面向对象
@@ -9,7 +9,7 @@ Tags: [类型/笔记, 类型/系列, 编程语言/Python]
 
 ## 面向对象
 
-基于 [[面向对象]] 的思维，pathlib 把路径视作一个 [[对象]]，将 [[os]]、[[sys]] 等 [[模块]] 的操作封装进到了对象的方法中。
+基于 [[面向对象]] 的思维，pathlib 把 [[文件系统]] 的路径视作一个 [[对象]]，将 [[os]]、[[sys]] 等 [[模块]] 的操作封装进到了对象的方法中。
 编写应用层代码时，合适地使用 pathlib，或许能获得更高的抽象层次和更佳的可读性。
 
 模块向外暴露了 6 种可供使用的 [[类]]：`PurePath`、`PurePosixPath`、`PureWindowsPath`、`Path`、`PosixPath`、`WindowsPath`。
@@ -35,18 +35,18 @@ Tags: [类型/笔记, 类型/系列, 编程语言/Python]
 
 ## os.PathLike
 
-路径对象可以用于任何可以接受 `os.PathLike` 接口的地方。
+路径对象可以用于任何可以接受 [`os.PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) 接口的地方。
 
 ```Python
 >>> os.fspath(PurePath("/etc"))
 '/etc'
 ```
 
-fspath 相关概念的接口是 3.6 以上版本的新增功能，因此建议 pathlib 也尽可能工作在 3.6 以上的版本中。
+PathLike 的相关概念是 Python 3.6 版本的新增功能，因此建议 pathlib 也尽可能工作在 3.6 或以上的版本中。
 
 ## 基本用法
 
-导入主类：
+导入：
 
 ```Python
 >>> from pathlib import Path

@@ -9,7 +9,7 @@ Tags: [类型/笔记, 类型/系列, 编程语言/Python3]
 
 ## 继承自纯路径类
 
-三种路径 [[类]] 分别 [[继承]] 自三种纯路径类。
+3 种路径 [[类]] 分别 [[继承]] 自 3 种纯路径类。
 除了 [[父类]] 提供的纯路径计算以外，路径类还封装了系统调用的 [[I/O]] 操作。
 
 和纯路径类一样，`Path` 类会自动根据当前的 [[文件系统]] 路径风格，转化成 `PosixPath` 或 `WindowsPath`。
@@ -17,7 +17,7 @@ Tags: [类型/笔记, 类型/系列, 编程语言/Python3]
 
 ## 类方法
 
-### cwd()
+### cwd() 当前路径
 
 返回一个表示当前目录的 [[绝对路径]] 的 [[对象]]。
 
@@ -26,50 +26,13 @@ Tags: [类型/笔记, 类型/系列, 编程语言/Python3]
 PosixPath('/home/anyone/pathlib')
 ```
 
-### home()
+### home() 家目录
 
 返回一个表示当前 [[用户]] [[家目录]] 的绝对路径的新对象。
 
-## 文件操作
+## 文件搜索
 
-### mkdir(...)
-
-原型：
-
-```Python
-Path.mkdir(mode=0o777, parents=False, exist_ok=False)
-```
-
-根据给定的路径，新建一个目录；如果给出了 *mode* 需要与 [[进程]] 的 *umask* 值合并来决定最终的模式和权限。
-
-*parents* 设置为 `True` 后，从当前路径到目标路径中不存在的目录都将被创建；这些父路径的权限是默认的权限，不跟随 *mode* 改变；相当于 `mkdir -p` 命令。
-设置为 `False` 且父路径不存在时，抛出 `FileNotFoundError`。
-
-- 3.5 版本加入了 `exist_ok` [[形参]]，默认值为 `False`，若目标路径已存在目录的话，会抛出 `FileExistsError`；反之，忽略该异常。
-
-### rmdir()
-
-移除该目录，要求是该目录必须为空。
-
-### touch(...)
-
-原型：
-
-```Python
-touch(mode=0o666, exist_ok=True)
-```
-
-在原对象的路径下创建文件，如果给出 *mode* [[参数]]，则和当前进程的 *umask* 值合并确定模式和权限。
-
-如果文件已存在，且 *exist_ok* 设置为 `True`，函数会直接返回；否则，抛出 `FileExistsError`。
-
-### unlink(missing_ok=False)
-
-如果路径是个文件，或者路径是个 [[符号链接]]，则会直接删除；如果路径对象是个目录，则会调用 [[#rmdir()]]。
-
-- 3.8 新增形参 *missing_ok*，其为真时，方法会忽略 `FileNotFoundError`（和 `rm -f` 命令相同）。
-
-### glob(pattern)
+### glob(*pattern*)
 
 返回一个路径对象 [[列表]]。
 解析相对于此路径的 [[通配符]] *pattern*，产生所有匹配的文件。
@@ -84,7 +47,7 @@ touch(mode=0o666, exist_ok=True)
 
 该操作会引发一个 [[审计事件]]，附带参数 `self` 和 `pattern`。
 
-### rglob(pattern)
+### rglob(*pattern*) 递归
 
 返回一个路径对象列表。
 [[#glob(pattern)]] 主动触发子目录递归的版本，相当于在 *pattern* 参数的最开始添加一个 `**/`。
@@ -109,54 +72,11 @@ PosixPath('docs/conf.py')
 PosixPath('docs/index.rst')
 ```
 
-[[模块]] 没有规定，在迭代器创建之后又有目录被移除或添加的情形，因此可能在动态环境下，结果不会如预期所想地展示。
+迭代器创建之后可能又会有目录被移除或添加的情形，因此在动态环境下，它不能保证结果如预期所想那样。
 
-### symlink_to(...)
+## 路径解析
 
-原型：
-
-```Python
-Path.symlink_to(target, target_is_directory=False)
-```
-
-基于原路径对象，创建一个指向 `target` 的符号链接，即原路径对象成为符号链接。
-
-[[Windows]] 下，符号链接指向目录的话，`target_is_directory` 必须为 `True`；[[POSIX]] 忽略该参数。
-
-```ascii
-                                             +-------------+
-    symlink_to              +···· target ····+ Path Object |
-                            :                +------+------+
-                            v                       v
-  +-------------+     +-----+-----+           +-----+-----+
-  | return Path +<····| real_file +<==========+ link_file |
-  +-------------+     +-----------+           +-----------+
-```
-
-### link_to(target)
-
-创建一个路径为 *target* 的新路径对象，作为指向原路径的 [[硬链接]]，原路径对象不变，仍然指向真实文件。
-
-```ascii
-                      +-----------+           +-----------+     +-------------+
-                      | real_file +<==========+ link_file +····>+ return Path |
-                      +-----+-----+           +-----+-----+     +-------------+
-                            ^                       ^
-                     +------+------+                :
-                     | Path Object +···· target ····+               link_to
-                     +-------------+
-```
-
-### readlink()
-
-返回一个新路径，代表符号链接指向的真实路径。
-
-```Python
->>> Path("mylink").symlink_to("setup.py").readlink()
-PosixPath('setup.py')
-```
-
-### resolve(strict=False)
+### resolve(*strict=False*)
 
 将路径变为绝对路径，其中的符号链接和 `..` 符号也将被正确解析，返回新的路径对象。
 
@@ -175,7 +95,40 @@ PosixPath('setup.py')
 PosixPath('/home/snack/Documents/Note')
 ```
 
-## 读写操作
+## 目录操作
+
+### mkdir(...)
+
+原型：
+
+```Python
+Path.mkdir(mode=0o777, parents=False, exist_ok=False)
+```
+
+根据给定的路径，新建一个目录；如果给出了 *mode* 需要与 [[进程]] 的 *umask* 值合并来决定最终的模式和权限。
+
+*parents* 设置为 `True` 后，从当前路径到目标路径中不存在的目录都将被创建；这些父路径的权限是默认的权限，不跟随 *mode* 改变；相当于 `mkdir -p` 命令。
+设置为 `False` 且父路径不存在时，抛出 `FileNotFoundError`。
+
+- 3.5 版本加入了 `exist_ok` [[关键字参数]]，默认值为 `False`，若目标路径已存在目录的话，会抛出 `FileExistsError`；反之，忽略该异常。
+
+### rmdir()
+
+移除该目录，要求是该目录必须为空。
+
+## 文件读写
+
+### touch(...)
+
+原型：
+
+```Python
+touch(mode=0o666, exist_ok=True)
+```
+
+在原对象的路径下创建文件，如果给出 *mode* [[参数]]，则和当前进程的 *umask* 值合并确定模式和权限。
+
+如果文件已存在，且 *exist_ok* 设置为 `True`，函数会直接返回；否则，抛出 `FileExistsError`。
 
 ### open(...)
 
@@ -249,6 +202,61 @@ Path.read_text(encoding=None, errors=None)
 'Text contents'
 ```
 
+## 链接操作
+
+### symlink_to(...)
+
+原型：
+
+```Python
+Path.symlink_to(target, target_is_directory=False)
+```
+
+把调用该方法的路径对象变成一个指向 `target` 的软链接，返回 
+
+[[Windows]] 下，符号链接指向目录的话，`target_is_directory` 必须为 `True`；[[POSIX]] 忽略该参数。
+
+```ascii
+                           +---------------+
+          +· ·· target ·· ·+ Caller Object |
+          :                +-------+-------+
+          :                        |
+          v                        v
+    +-----+-----+            +-----+-----+
+    | real_file +<===========+ link_file |
+    +-----------+            +-----------+
+```
+
+### link_to(target)
+
+创建一个路径为 *target* 的新路径对象，作为指向原路径的 [[硬链接]]，原路径对象不变，仍然指向真实文件。
+
+```ascii
+    +-----------+            +-----------+
+    | real_file +<===========+ link_file |
+    +-----+-----+            +-----+-----+
+          ^                        ^
+          |                        :
+  +-------+-------+                :
+  | Caller Object +· ·· target ·· ·+
+  +---------------+
+```
+
+### readlink() 读取软链接
+
+返回一个新路径，代表符号链接指向的真实路径。
+
+```Python
+>>> Path("mylink").symlink_to("setup.py").readlink()
+PosixPath('setup.py')
+```
+
+### unlink(missing_ok=False)
+
+如果路径是个文件，或者路径是个 [[符号链接]]，则会直接删除；如果路径对象是个目录，则会调用 [[#rmdir()]]。
+
+- 3.8 新增形参 *missing_ok*，其为真时，方法会忽略 `FileNotFoundError`（和 `rm -f` 命令相同）。
+
 ## 读取元信息
 
 ### stat()
@@ -261,7 +269,7 @@ Path.read_text(encoding=None, errors=None)
 956
 ```
 
-### lstat()
+### lstat() 软链接元信息
 
 和 [[#stat()]] 一样，但该方法在面对符号链接时，返回的是符号链接的信息，而不是符号链接的目标的信息。
 
@@ -315,7 +323,7 @@ PosixPath('bar')
 >>> Path("setup.py").chmod(0o444)
 ```
 
-### lchmod(mode)
+### lchmod(mode) 修改软链接
 
 如果路径指向符号链接，那么修改的是符号链接的模式和权限，而不是符号链接所指向的真实文件。
 
@@ -336,7 +344,7 @@ is 判断方法会根据路径对象的指向，判断是否属于某种类型�
 
 判断路径是否指向一个正常文件，或正常文件的符号链接。
 
-### is_mount()
+### is_mount() 挂载点
 
 判断路径是否指向一个 [[挂载点]]，或挂载点的符号链接。
 
@@ -352,15 +360,15 @@ Windows 未实现该方法。
 
 判断路径是否指向一个 [[Unix]] [[socket 文件]]，或它的符号链接。
 
-### is_fifo()
+### is_fifo() 先进先出存储
 
 判断路径是否指向一个 [[先进先出]] 存储，或它的符号链接。
 
-### is_block_device()
+### is_block_device() 块设备
 
 判断路径是否指向一个 [[块设备]]，或块设备的符号链接。
 
-### is_char_device()
+### is_char_device() 字节设备
 
 判断路径是否指向一个 [[字节设备]]，或字节设备的符号链接。
 
@@ -398,22 +406,22 @@ True
     - [[#read_text()]]
     - [[#expanduser()]]
     - [[#samefile(other) 相同判断]]
-- 3.7 新增方法
-    - [[#is_mount()]]
-- 3.8 新增方法
-    - [[#link_to(target)]]
-- 3.9 新增方法
-    - [[#readlink()]]
 - 3.5 更改
     - [[#mkdir(...)]]
 - 3.6 更改
     - [[#resolve(strict=False)]]
+- 3.7 新增方法
+    - [[#is_mount()]]
+- 3.8 新增方法
+    - [[#link_to(target)]]
 - 3.8 更改
     - [[#unlink(missing_ok=False)]]
     - [[#rename(target)]]
     - [[#replace(target)]]
     - [[#is 判断方法]]
     - [[#exists() 存在判断]]
+- 3.9 新增方法
+    - [[#readlink()]]
 
 ## 系列笔记
 
